@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#ff3b7f">
+<title>LoveMeter ❤️</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:linear-gradient(135deg,#ffe5ef,#fff7fa);
+  color:#321722;
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:white;
+  border-radius:24px;
+  padding:25px;
+  margin-top:20px;
+  box-shadow:0 10px 35px rgba(0,0,0,.10);
+}
+
+.logo{
+  text-align:center;
+  font-size:65px;
+}
+
+h1{
+  text-align:center;
+  margin:5px 0;
+  color:#ff3b7f;
+}
+
+.subtitle{
+  text-align:center;
+  color:#765866;
+  line-height:1.5;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin:8px 0;
+  border:2px solid #f1d6df;
+  border-radius:14px;
+  font-size:16px;
+  outline:none;
+}
+
+input:focus{
+  border-color:#ff3b7f;
+}
+
+button{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border:none;
+  border-radius:14px;
+  background:#ff3b7f;
+  color:white;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:disabled{
+  background:#ddd;
+  cursor:not-allowed;
+}
+
+.secondary{
+  background:#ffe3ed;
+  color:#b51e58;
+}
+
+.hidden{
+  display:none;
+}
+
+.progress{
+  height:8px;
+  background:#f5dbe4;
+  border-radius:20px;
+  overflow:hidden;
+  margin:15px 0 25px;
+}
+
+.progress-bar{
+  height:100%;
+  width:0%;
+  background:#ff3b7f;
+  transition:.3s;
+}
+
+.question{
+  font-size:21px;
+  line-height:1.4;
+}
+
+.option{
+  background:#fff4f7;
+  color:#4b2633;
+  border:2px solid #f2d8e1;
+  text-align:left;
+}
+
+.option:hover{
+  border-color:#ff3b7f;
+}
+
+.option.selected{
+  background:#ffe0eb;
+  border-color:#ff3b7f;
+}
+
+.score{
+  text-align:center;
+  font-size:65px;
+  font-weight:bold;
+  color:#ff3b7f;
+}
+
+.result-box{
+  display:flex;
+  justify-content:space-between;
+  padding:14px;
+  margin:9px 0;
+  background:#fff3f7;
+  border-radius:13px;
+}
+
+.small{
+  font-size:12px;
+  line-height:1.5;
+  color:#806873;
+}
+
+.price{
+  text-align:center;
+  font-size:30px;
+  font-weight:bold;
+  margin:15px;
+}
+
+.center{
+  text-align:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- HOME -->
+
+<div id="home" class="card">
+
+<div class="logo">❤️</div>
+
+<h1>LoveMeter</h1>
+
+<p class="subtitle">
+Aap dono ki compatibility kitni hai?
+</p>
+
+<button onclick="showDetails()">
+💕 Start Love Test
+</button>
+
+<p class="small center">
+Ye entertainment-based compatibility quiz hai.
+Ye scientific relationship prediction nahi hai.
+</p>
+
+</div>
+
+
+<!-- DETAILS -->
+
+<div id="details" class="card hidden">
+
+<h2>💕 Couple Details</h2>
+
+<p>Apna naam</p>
+
+<input id="person1" placeholder="Aapka naam">
+
+<p>Partner ka naam</p>
+
+<input id="person2" placeholder="Partner ka naam">
+
+<button onclick="startQuiz()">
+Start Test ❤️
+</button>
+
+<button class="secondary" onclick="goHome()">
+Back
+</button>
+
+</div>
+
+
+<!-- QUIZ -->
+
+<div id="quiz" class="card hidden">
+
+<div id="questionNumber"></div>
+
+<div class="progress">
+<div id="progressBar" class="progress-bar"></div>
+</div>
+
+<h2 class="question" id="questionText"></h2>
+
+<div id="options"></div>
+
+<button id="nextButton" onclick="nextQuestion()" disabled>
+Next
+</button>
+
+</div>
+
+
+<!-- PAYMENT -->
+
+<div id="payment" class="card hidden">
+
+<div class="logo">💖</div>
+
+<h2 class="center">
+Your LoveMeter Result Is Ready!
+</h2>
+
+<div class="score" id="previewScore">
+0%
+</div>
+
+<p class="subtitle">
+Detailed report unlock karein
+</p>
+
+<div class="result-box">
+<span>❤️ Love Compatibility</span>
+<b>✓</b>
+</div>
+
+<div class="result-box">
+<span>🤝 Trust</span>
+<b>✓</b>
+</div>
+
+<div class="result-box">
+<span>💬 Communication</span>
+<b>✓</b>
+</div>
+
+<div class="result-box">
+<span>🌱 Future Compatibility</span>
+<b>✓</b>
+</div>
+
+<div class="price">
+₹19
+</div>
+
+<button onclick="demoPayment()">
+🔓 Unlock Report — ₹19
+</button>
+
+<p class="small center">
+Demo mode: abhi actual payment gateway connected nahi hai.
+</p>
+
+</div>
+
+
+<!-- RESULT -->
+
+<div id="result" class="card hidden">
+
+<div class="logo">💖</div>
+
+<h2 class="center">
+LoveMeter Report
+</h2>
+
+<p class="subtitle" id="coupleNames"></p>
+
+<div class="score" id="finalScore">
+0%
+</div>
+
+<p class="center" id="resultMessage"></p>
+
+<div class="result-box">
+<span>❤️ Love Compatibility</span>
+<b id="loveScore"></b>
+</div>
+
+<div class="result-box">
+<span>🤝 Trust</span>
+<b id="trustScore"></b>
+</div>
+
+<div class="result-box">
+<span>💬 Communication</span>
+<b id="communicationScore"></b>
+</div>
+
+<div class="result-box">
+<span>🌱 Future Compatibility</span>
+<b id="futureScore"></b>
+</div>
+
+<hr>
+
+<p id="personalMessage"></p>
+
+<button onclick="location.reload()">
+🔄 Take Test Again
+</button>
+
+<p class="small">
+LoveMeter ka result entertainment/quiz interpretation hai,
+scientific measurement ya relationship guarantee nahi.
+</p>
+
+</div>
+
+</div>
+
+
+<script>
+
+const questions = [
+
+{
+question:"Fight hone ke baad pehle baat kaun karta hai?",
+options:[
+"Main",
+"Partner",
+"Dono",
+"Situation par depend"
+]
+},
+
+{
+question:"Aap partner par kitna trust karte hain?",
+options:[
+"Bahut zyada",
+"Achha khaasa",
+"Thoda",
+"Bahut kam"
+]
+},
+
+{
+question:"Aap dono kitni frequently baat karte hain?",
+options:[
+"Almost all day",
+"Roz",
+"Kabhi-kabhi",
+"Bahut kam"
+]
+},
+
+{
+question:"Partner upset ho to aap kya karte hain?",
+options:[
+"Turant baat karta hoon",
+"Usko space deta hoon",
+"Situation dekhta hoon",
+"Ignore karta hoon"
+]
+},
+
+{
+question:"Future ko lekar aap dono ki thinking kaisi hai?",
+options:[
+"Almost same",
+"Mostly same",
+"Different",
+"Bahut different"
+]
+},
+
+{
+question:"Kya aap apni personal problems partner se share karte hain?",
+options:[
+"Hamesha",
+"Usually",
+"Kabhi-kabhi",
+"Bahut kam"
+]
+},
+
+{
+question:"Relationship mein jealousy kitni hoti hai?",
+options:[
+"Almost none",
+"Thodi",
+"Kaafi",
+"Bahut zyada"
+]
+},
+
+{
+question:"Partner aapki feelings ko kitna samajhta hai?",
+options:[
+"Bahut achhe se",
+"Achhe se",
+"Kabhi-kabhi",
+"Bahut kam"
+]
+},
+
+{
+question:"Kya aap dono ek-dusre ko personal space dete hain?",
+options:[
+"Comfortably",
+"Mostly",
+"Kabhi-kabhi",
+"Bahut kam"
+]
+},
+
+{
+question:"Difficult situation mein partner kitna support karta hai?",
+options:[
+"Bahut zyada",
+"Achha",
+"Kabhi-kabhi",
+"Bahut kam"
+]
+},
+
+{
+question:"Aap dono kitna quality time spend karte hain?",
+options:[
+"Bahut frequently",
+"Regularly",
+"Kabhi-kabhi",
+"Rarely"
+]
+},
+
+{
+question:"Overall aap apne relationship se kitne satisfied hain?",
+options:[
+"Bahut satisfied",
+"Satisfied",
+"Unsure",
+"Unsatisfied"
+]
+}
+
+];
+
+
+let currentQuestion = 0;
+let totalPoints = 0;
+let selectedAnswer = null;
+let finalPercentage = 0;
+
+
+function hideAll(){
+
+document.getElementById("home").classList.add("hidden");
+document.getElementById("details").classList.add("hidden");
+document.getElementById("quiz").classList.add("hidden");
+document.getElementById("payment").classList.add("hidden");
+document.getElementById("result").classList.add("hidden");
+
+}
+
+
+function showDetails(){
+
+hideAll();
+
+document.getElementById("details").classList.remove("hidden");
+
+}
+
+
+function goHome(){
+
+hideAll();
+
+document.getElementById("home").classList.remove("hidden");
+
+}
+
+
+function startQuiz(){
+
+let p1=document.getElementById("person1").value.trim();
+let p2=document.getElementById("person2").value.trim();
+
+if(p1==="" || p2===""){
+
+alert("Dono naam bharna zaroori hai ❤️");
+
+return;
+
+}
+
+currentQuestion=0;
+totalPoints=0;
+selectedAnswer=null;
+
+hideAll();
+
+document.getElementById("quiz").classList.remove("hidden");
+
+loadQuestion();
+
+}
+
+
+function loadQuestion(){
+
+let q=questions[currentQuestion];
+
+document.getElementById("questionNumber").innerText=
+"Question "+(currentQuestion+1)+" / "+questions.length;
+
+document.getElementById("progressBar").style.width=
+((currentQuestion/questions.length)*100)+"%";
+
+document.getElementById("questionText").innerText=
+q.question;
+
+let options=document.getElementById("options");
+
+options.innerHTML="";
+
+selectedAnswer=null;
+
+document.getElementById("nextButton").disabled=true;
+
+
+q.options.forEach((option,index)=>{
+
+let button=document.createElement("button");
+
+button.innerText=option;
+
+button.className="option";
+
+button.onclick=function(){
+
+document.querySelectorAll(".option").forEach(
+b=>b.classList.remove("selected")
+);
+
+button.classList.add("selected");
+
+selectedAnswer=index;
+
+document.getElementById("nextButton").disabled=false;
+
+};
+
+options.appendChild(button);
+
+});
+
+}
+
+
+function nextQuestion(){
+
+if(selectedAnswer===null){
+
+return;
+
+}
+
+
+/*
+Index 0 = highest points
+Index 3 = lowest points
+*/
+
+let points=4-selectedAnswer;
+
+totalPoints+=points;
+
+
+if(currentQuestion < questions.length-1){
+
+currentQuestion++;
+
+loadQuestion();
+
+}else{
+
+calculateResult();
+
+}
+
+}
+
+
+function calculateResult(){
+
+/*
+Maximum = 12 × 4 = 48
+*/
+
+finalPercentage=Math.round(
+(totalPoints/(questions.length*4))*100
+);
+
+document.getElementById("previewScore").innerText=
+finalPercentage+"%";
+
+hideAll();
+
+document.getElementById("payment").classList.remove("hidden");
+
+}
+
+
+function demoPayment(){
+
+/*
+IMPORTANT:
+Ye sirf prototype demo hai.
+Real payment ke liye payment gateway
+verification backend par karni hogi.
+*/
+
+showResult();
+
+}
+
+
+function showResult(){
+
+let p1=document.getElementById("person1").value;
+
+let p2=document.getElementById("person2").value;
+
+
+document.getElementById("coupleNames").innerText=
+p1+" ❤️ "+p2;
+
+
+document.getElementById("finalScore").innerText=
+finalPercentage+"%";
+
+
+let love=Math.min(100,finalPercentage+3);
+
+let trust=Math.min(100,finalPercentage+6);
+
+let communication=Math.max(0,finalPercentage-4);
+
+let future=Math.max(0,finalPercentage-2);
+
+
+document.getElementById("loveScore").innerText=
+love+"%";
+
+document.getElementById("trustScore").innerText=
+trust+"%";
+
+document.getElementById("communicationScore").innerText=
+communication+"%";
+
+document.getElementById("futureScore").innerText=
+future+"%";
+
+
+if(finalPercentage>=80){
+
+document.getElementById("resultMessage").innerText=
+"Your answers show many positive compatibility patterns. ❤️";
+
+}else if(finalPercentage>=60){
+
+document.getElementById("resultMessage").innerText=
+"Aapke answers mein kai common areas dikh rahe hain. 💕";
+
+}else{
+
+document.getElementById("resultMessage").innerText=
+"Aap dono ke answers mein kuch areas hain jinhe aur explore kiya ja sakta hai. 💬";
+
+}
+
+
+document.getElementById("personalMessage").innerText=
+
+p1+" aur "+p2+
+", relationship mein open communication, trust aur ek-dusre ki feelings ko samajhna important hai. ❤️";
+
+
+hideAll();
+
+document.getElementById("result").classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
