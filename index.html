@@ -277,7 +277,7 @@ Detailed report unlock karein
 ₹19
 </div>
 
-<button onclick="demoPayment()">
+<button onclick="startPayment()">
 🔓 Unlock Report — ₹19
 </button>
 
@@ -637,18 +637,101 @@ document.getElementById("payment").classList.remove("hidden");
 }
 
 
-function demoPayment(){
+async function startPayment(){
 
-/*
-IMPORTANT:
-Ye sirf prototype demo hai.
-Real payment ke liye payment gateway
-verification backend par karni hogi.
-*/
+  try {
 
-showResult();
+    // Load Razorpay Checkout
+    if (!window.Razorpay) {
+      await new Promise((resolve, reject) => {
+        const script = document.createElement("script");
+        script.src = "https://checkout.razorpay.com/v1/checkout.js";
+        script.onload = resolve;
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+    }
 
-}
+    // Create secure order on Cloudflare Worker
+    const orderResponse = await fetch(
+      "https://lovemeter-payment.kamalbhati6833.workers.dev/create-order",
+      {
+        method: "POST"
+      }
+    );
+
+    const order = await orderResponse.json();
+
+    if (!order.order_id) {
+      throw new Error("Order create nahi hua");
+    }
+
+    const options = {
+
+      key: order.key_id,
+
+      amount: order.amount,
+
+      currency: order.currency,
+
+      name: "LoveMeter",
+
+      description: "LoveMeter Detailed Report",
+
+      order_id: order.order_id,
+
+      handler: async function(response) {
+
+        // Verify payment on Cloudflare Worker
+        const verifyResponse = await fetch(
+          "https://lovemeter-payment.kamalbhati6833.workers.dev/verify-payment",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          }
+        );
+
+        const result = await verifyResponse.json();
+
+        // Report unlock ONLY after server verification
+        if (result.paid === true) {
+          showResult();
+        } else {
+          alert("Payment verify nahi ho paya. Report unlock nahi hui.");
+        }
+      },
+
+      modal: {
+        ondismiss: function() {
+          console.log("Payment window closed");
+        }
+      },
+
+      theme: {
+        color: "#ff4d88"
+      }
+    };
+
+    const razorpay = new Razorpay(options);
+
+    razorpay.open();
+
+  } catch (error) {
+
+    console.error(error);
+
+    alert("Payment start nahi ho paya. Please try again.");
+
+  }
+
+  }
 
 
 function showResult(){
